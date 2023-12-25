@@ -1,9 +1,10 @@
-(ns clojure.examples.hello
+(ns clojure_test.main
   (:gen-class))
+(defmacro infix "Use this macro when you pine for the notation of your childhood" [infixed] (list (second infixed) (first infixed) (last infixed)))
+
 
 (defn -main
   [& args]
-  (println "Hello, World!")
   (println (= (list :a :b :c
                     ) '(:a :b :c))
            )
@@ -35,8 +36,10 @@
   reduce #(cons %2 %1) '()
 
 
-  )
 
+  (println (infix (1 + 1)))
+
+  )
 
 
 
