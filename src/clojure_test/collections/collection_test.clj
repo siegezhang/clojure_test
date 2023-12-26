@@ -1,7 +1,7 @@
 (ns clojure_test.collections.collection_test
   (:require [clojure.set :refer [map-invert]]
             [clojure.test :refer [is]]
-            ))
+            ) (:import (java.util Locale)))
 
 ;; Sample vector with some JVM langauges.
 (def languages ["Clojure" "Groovy" "Java"])
@@ -95,3 +95,105 @@
 ;; we want to get rid of consecutive clicks at the same position.
 (is (= [{:x 1 :y 2} {:x 1 :y 1} {:x 0 :y 0}]
        (dedupe '({:x 1 :y 2} {:x 1 :y 1} {:x 1 :y 1} {:x 0 :y 0}))))
+
+;; Vector of some JVM languages.
+(def languages ["Java" "Kotlin" "Clojure" "Groovy"])
+
+;; Using only the start index argumnt we get all items
+;; from the start index to the end.
+(is (= ["Clojure" "Groovy"] (subvec languages 2)))
+
+;; When we use the start and end index arguments
+;; we get the items from start to the given end.
+(is (= ["Clojure"] (subvec languages 2 3)))
+
+
+;; The split-with function has a predicate and returns the result
+;; of the functions take-while and drop-while in a result vector.
+(let [less-than-5? (partial > 5)
+      numbers (range 11)]
+  (is (= ['(0 1 2 3 4) '(5 6 7 8 9 10)]
+         (split-with less-than-5? numbers))
+      [(take-while less-than-5? numbers) (drop-while less-than-5? numbers)]))
+
+;; In this example we take while the value is a String value and
+;; drop while starting from first value that is not a String.
+(letfn [(string-value? [[k v]] (instance? String v))]
+  (is (= ['([:language "Clojure"] [:alias "mrhaki"]) '([:age 47] [:country "NL"])]
+         (split-with string-value? {:language "Clojure" :alias "mrhaki" :age 47 :country "NL"}))))
+
+
+;; Instead of splitting on a predicate we can just give the number
+;; of elements we want to split on with the split-at function.
+(is (= ['(0 1 2 3) '(4 5 6 7)]
+       (split-at 4 (range 8))
+       [(take 4 (range 8)) (drop 4 (range 8))]))
+
+(is (= ['([:language "Clojure"] [:alias "mrhaki"] [:age 47]) '([:country "NL"])]
+       (split-at 3 {:language "Clojure" :alias "mrhaki" :age 47 :country "NL"})))
+
+;; shuffle will return a new collection
+;; where the items are in a different order.
+(shuffle (range 5)) ;; Possible collection [4 0 1 2 3]
+(shuffle (range 5)) ;; Possible collection [1 3 4 2 0]
+
+;; Define a deck of cards.
+(def cards (for [suite  [\♥ \♠ \♣ \♦]
+                 symbol (concat (range 2 11) [\J \Q \K \A])]
+             (str suite symbol)))
+
+;; Some checks on our deck of cards.
+(is (= 52 (count cards)))
+(is (= (list "♥2" "♥3" "♥4" "♥5" "♥6" "♥7" "♥8" "♥9" "♥10" "♥J" "♥Q" "♥K" "♥A")
+       (take 13 cards)))
+
+;; Let's shuffle the deck. We get a new collection of cards ordered randomly.
+(def shuffled-deck (shuffle cards))
+
+;; Shuffled deck contains all items from the cards collection.
+(is (true? (every? (set cards) shuffled-deck)))
+
+;; We can take a number of cards.
+(take 5 shuffled-deck) ;; Possible result: ("♦6" "♦10" "♥K" "♥4" "♥10")
+
+;; We do a re-shuffle and get different cards now.
+(take 5 (shuffle shuffled-deck)) ;; Possible result: ("♥10" "♥Q" "♦4" "♣8" "♠5")
+
+;; Create new string with format string as template as first argument.
+;; Following arguments are used to replace placeholders in the
+;; format string.
+;; Clojure will delegate to the java.lang.String#format method and
+;; we can use all format string options that are defined for this method.
+;; More details about the format string syntax can be found in
+;; java.util.Formatter. In a REPL we can find the docs
+;; with (javadoc java.util.Formatter).
+(is (= "https://www.mrhaki.com/"
+       (format "https://%s/" "www.mrhaki.com")))
+
+;; Format string with argument index to refer to one argument twice.
+(is (= "clojure CLOJURE"
+       (format "%1$s %1$S" "clojure")))
+
+;; Format string to define fixed result lenght of 10 characers
+;; with padding to get the given length.
+(is (= "   Clojure"
+       (format "%10s" "Clojure")))
+
+;; Default Locale is used to determine how locale specific
+;; formats are applied. In the following example the default
+;; decimal separator is . and group separator is , as specified
+;; for the Canadian Locale.
+(Locale/setDefault Locale/CANADA)
+(is (= "Total: 42,000.00"
+       (format "Total: %,.2f", 42000.0)))
+
+(defn format-locale
+  "Format a string using String/format with a Locale parameter"
+  [locale fmt & args]
+  (String/format locale fmt (to-array args)))
+
+;; We can use a different Locale to apply different specific
+;; locale formats. In the next example we use the Dutch Locale
+;; and the decimal seperator is , and the group separator is ..
+(is (= "Totaal: 42.000,00"
+       (format-locale (Locale. "nl") "Totaal: %,.2f" 42000.0)))
