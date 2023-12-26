@@ -51,3 +51,47 @@
 ;; With duplicate values only one will be key.
 (is (= {1 :c 2 :b 3 :d}
        (map-invert {:a 1 :b 2 :c 1 :d 3})))
+
+
+;; In the following example we have the results
+;; from several throws with a dice and we want
+;; to remove all duplicates.
+(is (= [1 5 6 2 3] (distinct [1 5 5 6 2 3 3 1])))
+
+;; Only duplicates are removed.
+(is (= ["Clojure" "Groovy" "Java"]
+       (distinct ["Clojure" "Groovy" "Java" "Java" "Java" "Clojure"])))
+
+;; String is also a collection we can invoke distinct function on.
+(is (= [\a \b \c \d \e \f] (distinct "aabccdeff")))
+
+;; For example a collection of mouse clicks where
+;; we want to get rid of duplicate clicks at the same position.
+(is (= [{:x 1 :y 1} {:x 1 :y 2} {:x 0 :y 0}]
+       (distinct '({:x 1 :y 1} {:x 1 :y 2} {:x 1 :y 1} {:x 0 :y 0}))))
+
+;; When we don't need the sequence result with ordening we can
+;; also use a set to remove duplicates.
+;; We loose the order of the elements.
+(is (= #{1 5 6 2 3}
+       (set [1 5 6 5 2 3 1])
+       (into #{} [1 5 6 5 2 3 1])))
+
+
+
+;; In the following example we have the results
+;; from several throws with a dice and we want
+;; remove duplicates that are thrown after another.
+(is (= [1 5 6 2 3 1] (dedupe [1 5 5 6 2 3 3 1])))
+
+;; Only consecutive duplicates are removed.
+(is (= ["Clojure" "Groovy" "Java" "Clojure"]
+       (dedupe ["Clojure" "Groovy" "Java" "Java" "Java" "Clojure"])))
+
+;; String is also a collection.
+(is (= [\a \b \c \d \e \f] (dedupe "aabccdeff")))
+
+;; For example a collection of mouse clicks where
+;; we want to get rid of consecutive clicks at the same position.
+(is (= [{:x 1 :y 2} {:x 1 :y 1} {:x 0 :y 0}]
+       (dedupe '({:x 1 :y 2} {:x 1 :y 1} {:x 1 :y 1} {:x 0 :y 0}))))
