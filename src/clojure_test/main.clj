@@ -1,5 +1,6 @@
 (ns clojure_test.main
-  (:gen-class))
+  (:gen-class)(:require
+                [clojure.test :refer :all]))
 (defmacro infix "Use this macro when you pine for the notation of your childhood" [infixed] (list (second infixed) (first infixed) (last infixed)))
 
 
@@ -40,6 +41,15 @@
   (println (infix (1 + 1)))
 
   )
+
+(defn foo
+  "I don't do a whole lot."
+  [x]
+  (println x "Hello, World!"))
+
+
+
+
 
 
 
