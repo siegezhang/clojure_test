@@ -1,7 +1,8 @@
 (ns clojure_test.collections.collection_test
   (:require [clojure.set :refer [map-invert]]
             [clojure.test :refer [is]]
-            ) (:import (java.util Locale)))
+            )
+  (:import (java.util Locale)))
 
 ;; Sample vector with some JVM langauges.
 (def languages ["Clojure" "Groovy" "Java"])
@@ -134,11 +135,11 @@
 
 ;; shuffle will return a new collection
 ;; where the items are in a different order.
-(shuffle (range 5)) ;; Possible collection [4 0 1 2 3]
-(shuffle (range 5)) ;; Possible collection [1 3 4 2 0]
+(shuffle (range 5))                                         ;; Possible collection [4 0 1 2 3]
+(shuffle (range 5))                                         ;; Possible collection [1 3 4 2 0]
 
 ;; Define a deck of cards.
-(def cards (for [suite  [\♥ \♠ \♣ \♦]
+(def cards (for [suite [\♥ \♠ \♣ \♦]
                  symbol (concat (range 2 11) [\J \Q \K \A])]
              (str suite symbol)))
 
@@ -154,10 +155,10 @@
 (is (true? (every? (set cards) shuffled-deck)))
 
 ;; We can take a number of cards.
-(take 5 shuffled-deck) ;; Possible result: ("♦6" "♦10" "♥K" "♥4" "♥10")
+(take 5 shuffled-deck)                                      ;; Possible result: ("♦6" "♦10" "♥K" "♥4" "♥10")
 
 ;; We do a re-shuffle and get different cards now.
-(take 5 (shuffle shuffled-deck)) ;; Possible result: ("♥10" "♥Q" "♦4" "♣8" "♠5")
+(take 5 (shuffle shuffled-deck))                            ;; Possible result: ("♥10" "♥Q" "♦4" "♣8" "♠5")
 
 ;; Create new string with format string as template as first argument.
 ;; Following arguments are used to replace placeholders in the
@@ -197,3 +198,39 @@
 ;; and the decimal seperator is , and the group separator is ..
 (is (= "Totaal: 42.000,00"
        (format-locale (Locale. "nl") "Totaal: %,.2f" 42000.0)))
+
+;; Vector of some JVM languages.
+(def languages ["Java" "Kotlin" "Clojure" "Groovy"])
+
+;; Using only the start index argumnt we get all items
+;; from the start index to the end.
+(is (= ["Clojure" "Groovy"] (subvec languages 2)))
+
+;; When we use the start and end index arguments
+;; we get the items from start to the given end.
+(is (= ["Clojure"] (subvec languages 2 3)))
+
+
+;; The split-with function has a predicate and returns the result
+;; of the functions take-while and drop-while in a result vector.
+(let [less-than-5? (partial > 5)
+      numbers (range 11)]
+  (is (= ['(0 1 2 3 4) '(5 6 7 8 9 10)]
+         (split-with less-than-5? numbers))
+      [(take-while less-than-5? numbers) (drop-while less-than-5? numbers)]))
+
+;; In this example we take while the value is a String value and
+;; drop while starting from first value that is not a String.
+(letfn [(string-value? [[k v]] (instance? String v))]
+  (is (= ['([:language "Clojure"] [:alias "mrhaki"]) '([:age 47] [:country "NL"])]
+         (split-with string-value? {:language "Clojure" :alias "mrhaki" :age 47 :country "NL"}))))
+
+
+;; Instead of splitting on a predicate we can just give the number
+;; of elements we want to split on with the split-at function.
+(is (= ['(0 1 2 3) '(4 5 6 7)]
+       (split-at 4 (range 8))
+       [(take 4 (range 8)) (drop 4 (range 8))]))
+
+(is (= ['([:language "Clojure"] [:alias "mrhaki"] [:age 47]) '([:country "NL"])]
+       (split-at 3 {:language "Clojure" :alias "mrhaki" :age 47 :country "NL"})))
