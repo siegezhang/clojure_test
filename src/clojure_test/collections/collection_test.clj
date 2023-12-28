@@ -1,5 +1,6 @@
 (ns clojure_test.collections.collection_test
   (:require [clojure.set :refer [map-invert]]
+            [clojure.set :refer [index]]
             [clojure.test :refer [is]]
             )
   (:import (java.util Locale)))
@@ -234,3 +235,99 @@
 
 (is (= ['([:language "Clojure"] [:alias "mrhaki"] [:age 47]) '([:country "NL"])]
        (split-at 3 {:language "Clojure" :alias "mrhaki" :age 47 :country "NL"})))
+
+;; shuffle will return a new collection
+;; where the items are in a different order.
+(shuffle (range 5))                                         ;; Possible collection [4 0 1 2 3]
+(shuffle (range 5))                                         ;; Possible collection [1 3 4 2 0]
+
+;; Define a deck of cards.
+(def cards (for [suite [\♥ \♠ \♣ \♦]
+                 symbol (concat (range 2 11) [\J \Q \K \A])]
+             (str suite symbol)))
+
+;; Some checks on our deck of cards.
+(is (= 52 (count cards)))
+(is (= (list "♥2" "♥3" "♥4" "♥5" "♥6" "♥7" "♥8" "♥9" "♥10" "♥J" "♥Q" "♥K" "♥A")
+       (take 13 cards)))
+
+;; Let's shuffle the deck. We get a new collection of cards ordered randomly.
+(def shuffled-deck (shuffle cards))
+
+;; Shuffled deck contains all items from the cards collection.
+(is (true? (every? (set cards) shuffled-deck)))
+
+;; We can take a number of cards.
+(take 5 shuffled-deck)                                      ;; Possible result: ("♦6" "♦10" "♥K" "♥4" "♥10")
+
+;; We do a re-shuffle and get different cards now.
+(take 5 (shuffle shuffled-deck))                            ;; Possible result: ("♥10" "♥Q" "♦4" "♣8" "♠5")
+
+;; We can use max to find the maximum number in the given arguments.
+(is (= 20 (max 10 2 3 1 20)))
+
+;; If we have a collection we can use apply max to find the maximum number.
+(is (= 20 (apply max [10 2 3 1 20])))
+
+
+;; We can use min to find the minimum number in the given arguments.
+(is (= 1 (min 10 2 3 1 20)))
+
+;; And also use apply min when we have collection with numbers.
+(is (= 1 (apply min [10 2 3 1 20])))
+
+
+;; When the arguments are not numbers we can provide a function to get
+;; back numbers and use that function with max-key to find the maximum.
+(is (= "Clojure" (max-key count "Java" "Groovy" "Clojure")))
+(is (= "Clojure" (apply max-key count ["Java" "Groovy" "Clojure"])))
+
+
+;; And to find the minimum for non-numbered arguments we can use min-key
+;; with a function to get back numbers.
+(is (= "Java" (min-key count "Java" "Groovy" "Clojure")))
+(is (= "Java" (apply min-key count ["Java" "Groovy" "Clojure"])))
+
+(def languages #{{:platform :jvm :name "Clojure"}
+                 {:platform :jvm :name "Groovy"}
+                 {:platform :native :name "Ruby"}
+                 {:platform :jvm :name "JRuby"}
+                 {:platform :native :name "Rust"}})
+
+;; index function returns a map with a key for
+;; each unique key/value combination for the keys
+;; passed as second argument.
+;; The value of each key is a set of the
+;; map that comply with the key/value combination.
+(is (= {{:platform :jvm}    #{{:platform :jvm :name "Clojure"}
+                              {:platform :jvm :name "Groovy"}
+                              {:platform :jvm :name "JRuby"}}
+        {:platform :native} #{{:platform :native :name "Ruby"}
+                              {:platform :native :name "Rust"}}}
+       (index languages [:platform])))
+
+;; We can use all collection functions on the map result
+;; of the index function.
+(is (= ["Clojure" "Groovy" "JRuby"]
+       (map :name (get (index languages [:platform]) {:platform :jvm}))))
+
+
+;; Set with sample data describing a shape
+;; at a x and y location.
+(def data #{{:shape :rectangle :x 100 :y 100}
+            {:shape :circle :x 100 :y 100}
+            {:shape :circle :x 100 :y 0}
+            {:shape :circle :x 0 :y 100}})
+
+;; We can use multiple keys as second argument of the
+;; index function if we want to index on values of
+;; more thane one key.
+(is (= {{:x 0 :y 100}   #{{:shape :circle :x 0 :y 100}}
+        {:x 100 :y 0}   #{{:shape :circle :x 100 :y 0}}
+        {:x 100 :y 100} #{{:shape :circle :x 100 :y 100}
+                          {:shape :rectangle :x 100 :y 100}}}
+       (index data [:x :y])))
+
+(is (= #{{:shape :circle :x 100 :y 100}
+         {:shape :rectangle :x 100 :y 100}}
+       (get (index data [:x :y]) {:x 100 :y 100})))
