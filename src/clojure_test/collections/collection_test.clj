@@ -331,3 +331,6 @@
 (is (= #{{:shape :circle :x 100 :y 100}
          {:shape :rectangle :x 100 :y 100}}
        (get (index data [:x :y]) {:x 100 :y 100})))
+
+
+(println (nfirst [[1 2 3] [4 5 6] [7 8 9]]))
