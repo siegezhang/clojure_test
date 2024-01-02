@@ -57,6 +57,15 @@
 
 
 (println (re-map #"_([^_]+)_"
-                  (fn [[_ s]]
-                    [:strong s])
-                  "This is _simple_ markup."))
+                 (fn [[_ s]]
+                   [:strong s])
+                 "This is _simple_ markup."))
+
+(defn re-map [re f s]
+  (if (re-matches re s)
+    [(f s)]
+    (remove #{"" ::padding}
+            (interleave
+              (clojure.string/split s re)
+              (concat (map f (re-seq re s)) [::padding])))))
+(re-map #"hello" (constantly :match) "hello")
