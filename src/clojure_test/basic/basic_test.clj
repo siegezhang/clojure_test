@@ -30,9 +30,9 @@
                                         (clojure.string/upper-case s)
                                         "</strong>"))))
 
-(remove pos? [1 -2 2 -1 3 7 0])
+(println (remove pos? [1 -2 2 -1 3 7 0]))
 
-(remove nil? [1 nil 2 nil 3 nil])
+(println (remove nil? [1 nil 2 nil 3 nil]))
 
 (remove #(zero? (mod % 3)) (range 1 21))
 
