@@ -152,5 +152,5 @@
 (class '("truck" "car" "bicycle" "plane"))
 
 
-;;给创建的列表绑定一个全局变量 
+;;给创建的列表绑定一个全局变量
 (def vehicles (list "truck" "car" "bicycle" "plane"))
