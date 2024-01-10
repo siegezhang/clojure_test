@@ -79,4 +79,34 @@
     (println id))
   (println id))
 
+;定义一个两个数字相加的匿名函数，并绑定到 add 上
+(def add (fn [a, b] (+ a b)))
+
+;等价的形式
+(def add #(+ %1 %2))
+
+;等价的形式
+(defn add [a, b] (+ a b))
+
+
+;clojure 是 lisp 的一种方言。lisp 是 “List  Processor” 的缩写，就是列表解析的意思，
+;使用列表来表示所有的东西（S 表达式）。从我们写的代码也可以看出，整个代码结构就是一个嵌套的列表
+(defn select-random
+  "从一个列表中随机返回一个元素"
+  {:added "1.2"} ;; 元数据
+  [options]
+  (nth options (rand-int (count options))))
+
+(defn greeting
+  "Composes a greeting sentence. Expects both the name of a greeter
+   and the name of whom is to be greeted for arguments. An approach
+   and an action are randomly selected."
+  {:added "1.2"}
+  [greeter whom]
+  ;;str 用于组装字符串
+  (str greeter " greeted " whom " with a "
+       (select-random (list "ferocious" "wimpy" "precarious" "subtle")) " "
+       (select-random (list "growl" "lick" "jump")) "!"))
+
+
 
