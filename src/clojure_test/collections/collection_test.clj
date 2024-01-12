@@ -1,8 +1,8 @@
 (ns clojure_test.collections.collection_test
   (:require [clojure.set :refer [map-invert]]
             [clojure.set :refer [index]]
-            [clojure.test :refer [is]]
-            )
+            [clojure.test :refer [is]])
+
   (:import (java.util Locale)))
 
 ;; Sample vector with some JVM langauges.
