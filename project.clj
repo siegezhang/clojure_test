@@ -10,7 +10,8 @@
                  [org.clojure/data.json "0.2.6"]
                  [org.slf4j/slf4j-simple "1.7.28"]
                  [korma "0.5.0-RC1"]
-                 [clj-time/clj-time "0.15.2"] [com.mysql/mysql-connector-j "8.2.0"]]
+                 [clj-time/clj-time "0.15.2"] [com.mysql/mysql-connector-j "8.2.0"]
+                 [org.clojure/algo.monads "0.1.6"]]
 
   ;[mysql/mysql-connector-java "8.0.13"]
 
