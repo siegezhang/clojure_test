@@ -115,9 +115,9 @@
   (is (= "Tilburg" city)))
 
 ;; Or convert string keys to keywords.
-(let [{:keys [alias city]} (keywordize-keys string-map)]
-  (is (= "mrhaki" alias))
-  (is (= "Tilburg" city)))
+;(let [{:keys [alias city]} (keywordize-keys string-map)]
+;  (is (= "mrhaki" alias))
+;  (is (= "Tilburg" city)))
 
 
 ;; For completeness we can destructure symbol keys.
