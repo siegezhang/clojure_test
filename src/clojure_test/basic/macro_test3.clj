@@ -14,11 +14,13 @@
 (println `(hash-map 1 2 ~@[3 4]))
 
 
-(def names '("Burke", "Frank", "Connor", "Albert", "Everett" "George", "Harris", "David"))
+(def names
+  '("Burke", "Frank", "Connor", "Albert", "Everett" "George", "Harris", "David"))
 
 
 (defmacro from [var _ coll _ condition _ ordering _ desired-map]
-  `(map (fn [~var] ~desired-map) (sort-by (fn [~var] ~ordering) (filter (fn [~var] ~condition) ~coll))))
+  `(map (fn [~var] ~desired-map)
+    (sort-by (fn [~var] ~ordering) (filter (fn [~var] ~condition) ~coll))))
 
 (def query
   (from n in names
