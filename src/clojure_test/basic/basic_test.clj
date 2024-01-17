@@ -105,7 +105,9 @@
 ;:file 对应的源码文件
 ;:arglists 参数列表 （一个函数刻意包含多个参数列表（见上篇），所以是 lists 而不是 list）
 ;:doc 函数描述
-(println (meta #'select-random))
+(println (meta #' select-random))
+(println (meta (var select-random)))
+(println  (var select-random))
 
 ;我们可不仅限于只给函数添加元数据。任何能绑定变量的都可以添加元数据，例如符号或者其他数据结构。
 (def approaches
@@ -126,6 +128,7 @@
        (select-random (list "ferocious" "wimpy" "precarious" "subtle")) " "
        (select-random (list "growl" "lick" "jump")) "!"))
 
+(println (greeting "siege" "me"))
 ;三种不同参数形式的 add 函数。
 ;这样调用的话 (add 1 2) 会匹配第一种形式，正确返回 3。
 ;(add 1 2 3) 会匹配第二种参数模式，返回结果 6。这其实就是 lisp 中模式匹配的一种应用

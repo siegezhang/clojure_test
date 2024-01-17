@@ -17,7 +17,7 @@
 (def names
   '("Burke", "Frank", "Connor", "Albert", "Everett" "George", "Harris", "David"))
 
-
+;;自定义linq语言
 (defmacro from [var _ coll _ condition _ ordering _ desired-map]
   `(map (fn [~var] ~desired-map)
     (sort-by (fn [~var] ~ordering) (filter (fn [~var] ~condition) ~coll))))
@@ -29,6 +29,8 @@
         select (. n toUpperCase)))
 
 (doseq [n query] (println n))
+
+
 
 
 

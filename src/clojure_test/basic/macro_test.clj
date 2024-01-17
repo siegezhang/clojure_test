@@ -52,4 +52,4 @@
   `(str ~cmd "; "))
 
 (cd " test"
-   (run " mkdir he") )
+   (run " mkdir he"))
