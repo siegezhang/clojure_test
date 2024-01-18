@@ -24,12 +24,12 @@
 
 
 (println
-  (clojure.string/replace "This is _simple_ markup."
-                          #"_([^_]+)_"
-                          (fn [[_ s]]
-                            (str "<strong>"
-                                 (clojure.string/upper-case s)
-                                 "</strong>"))))
+ (clojure.string/replace "This is _simple_ markup."
+                         #"_([^_]+)_"
+                         (fn [[_ s]]
+                           (str "<strong>"
+                                (clojure.string/upper-case s)
+                                "</strong>"))))
 
 (println (remove pos? [1 -2 2 -1 3 7 0]))
 
@@ -40,37 +40,37 @@
 (remove even? (range 10))
 
 (remove
-  (fn [x]
-    (= (count x) 1))
-  ["a" "aa" "b" "n" "f" "lisp" "clojure" "q" ""])
+ (fn [x]
+   (= (count x) 1))
+ ["a" "aa" "b" "n" "f" "lisp" "clojure" "q" ""])
 
 
 (defn re-map [re f s]
   (remove #{::padding}
           (interleave
-            (clojure.string/split s re)
-            (concat (map f (re-seq re s)) [::padding]))))
+           (clojure.string/split s re)
+           (concat (map f (re-seq re s)) [::padding]))))
 
 
 (defn re-map1 [re f s]
   (interleave
-    (clojure.string/split s re)
-    (concat (map f (re-seq re s)) [::padding])))
+   (clojure.string/split s re)
+   (concat (map f (re-seq re s)) [::padding])))
 
 
 (println
-  (re-map #"_([^_]+)_"
-          (fn [[_ s]]
-            [:strong s])
-          "This is _simple_ markup."))
+ (re-map #"_([^_]+)_"
+         (fn [[_ s]]
+           [:strong s])
+         "This is _simple_ markup."))
 
 (defn re-map [re f s]
   (if (re-matches re s)
     [(f s)]
     (remove #{"" ::padding}
             (interleave
-              (clojure.string/split s re)
-              (concat (map f (re-seq re s)) [::padding])))))
+             (clojure.string/split s re)
+             (concat (map f (re-seq re s)) [::padding])))))
 
 (re-map #"hello" (constantly :match) "hello")
 
@@ -93,7 +93,7 @@
 ;使用列表来表示所有的东西（S 表达式）。从我们写的代码也可以看出，整个代码结构就是一个嵌套的列表
 (defn select-random
   "从一个列表中随机返回一个元素"
-  {:added "1.2"}                                            ;; 元数据
+  {:added "1.2"} ;; 元数据
   [options]
   (nth options (rand-int (count options))))
 
@@ -107,7 +107,7 @@
 ;:doc 函数描述
 (println (meta #' select-random))
 (println (meta (var select-random)))
-(println  (var select-random))
+(println (var select-random))
 
 ;我们可不仅限于只给函数添加元数据。任何能绑定变量的都可以添加元数据，例如符号或者其他数据结构。
 (def approaches
@@ -129,6 +129,7 @@
        (select-random (list "growl" "lick" "jump")) "!"))
 
 (println (greeting "siege" "me"))
+
 ;三种不同参数形式的 add 函数。
 ;这样调用的话 (add 1 2) 会匹配第一种形式，正确返回 3。
 ;(add 1 2 3) 会匹配第二种参数模式，返回结果 6。这其实就是 lisp 中模式匹配的一种应用
@@ -147,8 +148,10 @@
        0)))
 
 ;如果你不想让你列表中的元素被解释执行，记得引用（quote）一下。
-(list "truck" "car" "bicycle" "plane")                      ;;创建一个列表
-'("truck" "car" "bicycle" "plane")
+(println (list "truck" "car" "bicycle" "plane"))
+
+;;创建一个列表
+(println '("truck" "car" "bicycle" "plane"))
 
 ;;查看列表的类型
 
@@ -156,4 +159,4 @@
 
 
 ;;给创建的列表绑定一个全局变量
-(def vehicles (list "truck" "car" "bicycle" "plane"))
+(def vehicles '("truck" "car" "bicycle" "plane"))
