@@ -105,7 +105,7 @@
 ;:file 对应的源码文件
 ;:arglists 参数列表 （一个函数刻意包含多个参数列表（见上篇），所以是 lists 而不是 list）
 ;:doc 函数描述
-(println (meta #' select-random))
+(println (meta #'select-random))
 (println (meta (var select-random)))
 (println (var select-random))
 
@@ -160,3 +160,36 @@
 
 ;;给创建的列表绑定一个全局变量
 (def vehicles '("truck" "car" "bicycle" "plane"))
+
+
+; define a multimethod for area with :Shape keyword.
+(defmulti area :Shape)
+
+(defn rect [wd ht] {:Shape :Rect :wd wd :ht ht})
+
+(defn circle [radius] {:Shape :Circle :radius radius})
+
+(defmethod area :Rect
+  [r]
+  (* (:wd r) (:ht r)))
+
+(defmethod area :Circle
+  [c]
+  (* (. Math PI) (* (:radius c) (:radius c))))
+
+(defmethod area :default [x] :oops)
+
+(def r (rect 4 13))
+
+(def c (circle 12))
+
+
+(defrecord person [name age])
+
+(person. "siddon" 30)
+
+;;等价于
+(->person "siddon" 30)
+
+;;等价于
+(map->person {:name "siddontang" :age 30)
