@@ -24,12 +24,12 @@
 
 
 (println
- (clojure.string/replace "This is _simple_ markup."
-                         #"_([^_]+)_"
-                         (fn [[_ s]]
-                           (str "<strong>"
-                                (clojure.string/upper-case s)
-                                "</strong>"))))
+  (clojure.string/replace "This is _simple_ markup."
+                          #"_([^_]+)_"
+                          (fn [[_ s]]
+                            (str "<strong>"
+                                 (clojure.string/upper-case s)
+                                 "</strong>"))))
 
 (println (remove pos? [1 -2 2 -1 3 7 0]))
 
@@ -40,37 +40,37 @@
 (remove even? (range 10))
 
 (remove
- (fn [x]
-   (= (count x) 1))
- ["a" "aa" "b" "n" "f" "lisp" "clojure" "q" ""])
+  (fn [x]
+    (= (count x) 1))
+  ["a" "aa" "b" "n" "f" "lisp" "clojure" "q" ""])
 
 
 (defn re-map [re f s]
   (remove #{::padding}
           (interleave
-           (clojure.string/split s re)
-           (concat (map f (re-seq re s)) [::padding]))))
+            (clojure.string/split s re)
+            (concat (map f (re-seq re s)) [::padding]))))
 
 
 (defn re-map1 [re f s]
   (interleave
-   (clojure.string/split s re)
-   (concat (map f (re-seq re s)) [::padding])))
+    (clojure.string/split s re)
+    (concat (map f (re-seq re s)) [::padding])))
 
 
 (println
- (re-map #"_([^_]+)_"
-         (fn [[_ s]]
-           [:strong s])
-         "This is _simple_ markup."))
+  (re-map #"_([^_]+)_"
+          (fn [[_ s]]
+            [:strong s])
+          "This is _simple_ markup."))
 
 (defn re-map [re f s]
   (if (re-matches re s)
     [(f s)]
     (remove #{"" ::padding}
             (interleave
-             (clojure.string/split s re)
-             (concat (map f (re-seq re s)) [::padding])))))
+              (clojure.string/split s re)
+              (concat (map f (re-seq re s)) [::padding])))))
 
 (re-map #"hello" (constantly :match) "hello")
 
@@ -93,7 +93,7 @@
 ;使用列表来表示所有的东西（S 表达式）。从我们写的代码也可以看出，整个代码结构就是一个嵌套的列表
 (defn select-random
   "从一个列表中随机返回一个元素"
-  {:added "1.2"} ;; 元数据
+  {:added "1.2"}                                            ;; 元数据
   [options]
   (nth options (rand-int (count options))))
 
@@ -192,4 +192,23 @@
 (->person "siddon" 30)
 
 ;;等价于
-(map->person {:name "siddontang" :age 30)
+(map->person {:name "siddontang" :age 30})
+
+(defmulti what_am_i class)
+
+(defmethod what_am_i Number [args] (println args "is num"))
+(defmethod what_am_i String [args] (println args "is String"))
+(defmethod what_am_i :default [args] (println args "is default"))
+
+(what_am_i 19)
+(what_am_i "luochao")
+(what_am_i true)
+
+(defmulti add (fn [a b] [(type a) (type b)]))
+
+(defmethod add [Integer Integer] ([a b] (+ a b)))
+
+(defmethod add [String String] ([a b] (str a b)))
+
+(add (int 1) (int 2))
+(add "hello" "world")

@@ -9,9 +9,9 @@
 
 (defmacro cond-let [nm & clauses]
   (when (seq clauses)
-    `(if-let [~nm ~(first clauses)]
-      ~(second clauses)
-      (cond-let ~nm ~@(drop 2 clauses)))))
+        `(if-let [~nm ~(first clauses)]
+          ~(second clauses)
+          (cond-let ~nm ~@(drop 2 clauses)))))
 
 (println
  (let [word "beta"]
@@ -65,9 +65,18 @@
   (list 'let ['result expression]
         (list 'println 'result)
         'result))
+
 ;;等价于
 (defmacro my-print2
   [expression]
   `(let [result# ~expression]
     (println result#)
     result#))
+
+(defmacro for-loop [[sym init check change] & steps]
+  `(loop [~sym         ~init
+          accumulated# nil]
+    (if ~check
+      (let [new-value# (do ~@steps)]
+        (recur ~change new-value#))
+      accumulated#)))
