@@ -23,6 +23,7 @@
 ;;了解'和`的区别,'叫simple quoting,`叫做Syntax Quote
 ;;syntax quoting跟simple quoting不同的地方在于，我们可以在syntax quoting里面使用~来unquote一些form，
 ;; 这等于是说，我要quote这一个expression，但是这个expression里面某一个form先evaluate
+;;Unlike defn, defmacro does not provide a context for runtime variable bindings.
 (println `(defn hello-world [] (println "Hello, data! Or code??")))
 
 ;; Define a macro using defmacro. Your macro should output a list that can
