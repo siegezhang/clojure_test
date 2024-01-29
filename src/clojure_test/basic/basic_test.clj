@@ -24,12 +24,12 @@
 
 
 (println
-  (clojure.string/replace "This is _simple_ markup."
-                          #"_([^_]+)_"
-                          (fn [[_ s]]
-                            (str "<strong>"
-                                 (clojure.string/upper-case s)
-                                 "</strong>"))))
+ (clojure.string/replace "This is _simple_ markup."
+                         #"_([^_]+)_"
+                         (fn [[_ s]]
+                           (str "<strong>"
+                                (clojure.string/upper-case s)
+                                "</strong>"))))
 
 (println (remove pos? [1 -2 2 -1 3 7 0]))
 
@@ -40,37 +40,37 @@
 (remove even? (range 10))
 
 (remove
-  (fn [x]
-    (= (count x) 1))
-  ["a" "aa" "b" "n" "f" "lisp" "clojure" "q" ""])
+ (fn [x]
+   (= (count x) 1))
+ ["a" "aa" "b" "n" "f" "lisp" "clojure" "q" ""])
 
 
 (defn re-map [re f s]
   (remove #{::padding}
           (interleave
-            (clojure.string/split s re)
-            (concat (map f (re-seq re s)) [::padding]))))
+           (clojure.string/split s re)
+           (concat (map f (re-seq re s)) [::padding]))))
 
 
 (defn re-map1 [re f s]
   (interleave
-    (clojure.string/split s re)
-    (concat (map f (re-seq re s)) [::padding])))
+   (clojure.string/split s re)
+   (concat (map f (re-seq re s)) [::padding])))
 
 
 (println
-  (re-map #"_([^_]+)_"
-          (fn [[_ s]]
-            [:strong s])
-          "This is _simple_ markup."))
+ (re-map #"_([^_]+)_"
+         (fn [[_ s]]
+           [:strong s])
+         "This is _simple_ markup."))
 
 (defn re-map [re f s]
   (if (re-matches re s)
     [(f s)]
     (remove #{"" ::padding}
             (interleave
-              (clojure.string/split s re)
-              (concat (map f (re-seq re s)) [::padding])))))
+             (clojure.string/split s re)
+             (concat (map f (re-seq re s)) [::padding])))))
 
 (re-map #"hello" (constantly :match) "hello")
 
@@ -93,7 +93,7 @@
 ;使用列表来表示所有的东西（S 表达式）。从我们写的代码也可以看出，整个代码结构就是一个嵌套的列表
 (defn select-random
   "从一个列表中随机返回一个元素"
-  {:added "1.2"}                                            ;; 元数据
+  {:added "1.2"} ;; 元数据
   [options]
   (nth options (rand-int (count options))))
 
@@ -215,6 +215,7 @@
 
 ;; If you were to try
 (max [1 2 3])
+
 ;;=> [1 2 3]
 
 ;; You would get '[1 2 3]' for the result. In this case, 'max' has received one
@@ -224,11 +225,54 @@
 ;; to use `apply`
 
 (apply max [1 2 3])
+
 ;;=> 3
 
 ;; which is the same as
 (max 1 2 3)
+
 ;;=> 3
 ;;In my continued playing around with Clojure I came across the 'apply' function which is used when we want to call another function
 ;; with a number of arguments but have actually been given a single argument which contains the argument list.
+
+
+;;(mapcat f & colls)
+;;等同于调用 (concat (map f colls)) 。
+
+(println
+ (mapcat reverse
+         [[3 2 1 0]
+          [6 5 4]
+          [9 8 7]]))
+
+(println
+ (concat
+  (flatten
+   (map reverse
+        [[3 2 1 0]
+         [6 5 4]
+         [9 8 7]]))))
+
+
+;; (= (__ [1 2 3] [:a :b :c]) '(1 :a 2 :b 3 :c))
+;; (= (__ [1 2] [3 4 5 6]) '(1 3 2 4))
+;; (= (__ [1 2 3 4] [5]) [1 5])
+;; (= (__ [30 20] [25 15]) [30 25 20 15])
+#(mapcat vector %1 %2)
+
+(println (map vector [1 2 3] [:a :b :c]))
+(println (vector [1 2 3] [:a :b :c]))
+(println (map [[1 2 3] [:a :b :c]]))
+
+
+(println
+ (apply map vector
+        [[:a :b :c]
+         [:d :e :f]
+         [:g :h :i]]))
+
+
+(println ((fn foo [x] (when (> x 0) (conj (foo (dec x)) x))) 5))
+
+
 
