@@ -212,3 +212,23 @@
 
 (add (int 1) (int 2))
 (add "hello" "world")
+
+;; If you were to try
+(max [1 2 3])
+;;=> [1 2 3]
+
+;; You would get '[1 2 3]' for the result. In this case, 'max' has received one
+;; vector argument, and the largest of its arguments is that single vector.
+
+;; If you would like to find the largest item **within** the vector, you would need
+;; to use `apply`
+
+(apply max [1 2 3])
+;;=> 3
+
+;; which is the same as
+(max 1 2 3)
+;;=> 3
+;;In my continued playing around with Clojure I came across the 'apply' function which is used when we want to call another function
+;; with a number of arguments but have actually been given a single argument which contains the argument list.
+
