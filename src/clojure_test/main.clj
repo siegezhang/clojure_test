@@ -1,14 +1,16 @@
 (ns clojure_test.main
-  (:gen-class)(:require
-                [clojure.test :refer :all]))
-(defmacro infix "Use this macro when you pine for the notation of your childhood" [infixed] (list (second infixed) (first infixed) (last infixed)))
+  (:gen-class)
+  (:require
+    [clojure.test :refer :all]))
+
 
 
 (defn -main
   [& args]
-  (println (= (list :a :b :c
-                    ) '(:a :b :c))
-           )
+  (println
+    (=
+      (list :a :b :c) '(:a :b :c)))
+
   (def user-data {:name "John Doe" :age 30})
   (println user-data)
 
@@ -34,13 +36,11 @@
   (println ((defn get-nth [seq n] (first (drop n seq))) '(4 5 6 7) 2))
   (println (= (#(reduce + (map (fn [x] 1) %)) '(1 2 3 3 1)) 5))
 
-  reduce #(cons %2 %1) '()
+  reduce #(cons %2 %1) '())
 
 
 
-  (println (infix (1 + 1)))
 
-  )
 
 (defn foo
   "I don't do a whole lot."

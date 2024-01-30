@@ -9,9 +9,9 @@
 
 (defmacro cond-let [nm & clauses]
   (when (seq clauses)
-        `(if-let [~nm ~(first clauses)]
-          ~(second clauses)
-          (cond-let ~nm ~@(drop 2 clauses)))))
+    `(if-let [~nm ~(first clauses)]
+      ~(second clauses)
+      (cond-let ~nm ~@(drop 2 clauses)))))
 
 (println
  (let [word "beta"]
