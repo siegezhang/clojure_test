@@ -134,3 +134,43 @@
 ;generator in other programming languages, like Python).
 ;;赋值给变量,可以惰性求值
 (def r (range 1 999999999))
+
+
+;; prepend 1 to a list
+(cons 1 '(2 3 4 5 6))
+
+;; notice that the first item is not expanded
+(cons [1 2] [4 5 6])
+
+;; Extract values from a map, treating keywords as functions.
+((juxt :a :b) {:a 1 :b 2 :c 3 :d 4})
+
+((juxt identity name) :keyword)
+
+;; Segregate even and odd numbers in collection.
+((juxt (partial filter even?) (partial filter odd?)) (range 0 9))
+
+(into {} (map (juxt identity name) [:a :b :c :d]))
+
+;; Get the first character and length of string
+((juxt first count) "Clojure Rocks")
+
+;; split a sequence into two parts
+((juxt take drop) 3 [1 2 3 4 5 6])
+
+;;keywords serve as getter functions to produce an ordered vector
+((juxt :lname :fname) {:fname "Bill" :lname "Gates"})
+
+
+;; something similar to group-by
+;;Applies filter to the list, keeping only the positive numbers: (4 5 3).
+;;Applies remove to the list, removing the positive numbers: (-1 -2 -9).
+(def split-by (juxt filter remove))
+
+(split-by pos? [-1 -2 4 5 3 -9])
+
+(defn add-n [n, coll]
+  (lazy-seq
+    (cons
+     (+ n (first coll))
+     (add-n n (rest coll)))))

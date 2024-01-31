@@ -275,4 +275,31 @@
 (println ((fn foo [x] (when (> x 0) (conj (foo (dec x)) x))) 5))
 
 
+(assoc {} :key1 "value" :key2 "another value")
+
+
+;; 'assoc' can be used on a vector (but not a list), in this way:
+;; (assoc vec index replacement)
+;;=> [10 2 3]
+(assoc [1 2 3] 0 10)
+
+;;=> [1 2 (4 6)]
+(assoc [1 2 3] 2 '(4 6))
+
+
+(let [{a :keyA, b :keyB} {:keyA 1, :keyB 2}] (list a b))
+
+(let [{a :a b :b} {:a "A" :b "B"}]
+  (prn a b))
+
+(let [{:keys [a b]} {:a "A" :b "B"}]
+  (prn a b))
+
+(let [[x y] [:a :b]]
+  (prn y x))
+
+(let [{:keys [a c] :as complete} {:a "A" :b "B" :c "C" :d "D"}]
+  (prn a c complete))
+
+
 
