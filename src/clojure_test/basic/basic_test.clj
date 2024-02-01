@@ -301,5 +301,34 @@
 (let [{:keys [a c] :as complete} {:a "A" :b "B" :c "C" :d "D"}]
   (prn a c complete))
 
+(def my-nested-hashmap {:a "A" :b "B" :c "C" :d "D" :q {:x "X" :y "Y" :z "Z"}})
+
+(let [{:keys [a b], {:keys [x y]} :q} my-nested-hashmap]
+  (println a b x y))
+
+
+(let [{:strs [a d]} {"a" "A", "b" "B", "c" "C", "d" "D"}]
+  (println a d))
+
+(let [{:syms [a d]} {'a "A", 'b "B", 'c "C", 'd "D"}]
+  (println a d))
+
+(let [{:keys [a b]} '("X", "Y", :a "A", :b "B")]
+  (println a b))
+
+(defn foo [a b & {:keys [x y]}]
+  (println a b x y))
+
+(foo "A" "B")
+
+;; => A B nil nil
+(foo "A" "B" :x "X")
+
+;; => A B X nil
+(foo "A" "B" :x "X" :y "Y")
+
+;; => A B X Y
+
+
 
 
