@@ -9,7 +9,7 @@
                  [io.pedestal/pedestal.jetty "0.6.3"]
                  [org.clojure/data.json "0.2.6"]
                  [org.slf4j/slf4j-simple "1.7.28"]
-                 [korma "0.5.0-RC1"]
+                 [korma "0.5.0-RC1"] [org.clojure/core.match "1.0.1"]
                  [clj-time/clj-time "0.15.2"] [com.mysql/mysql-connector-j "8.2.0"]
                  [org.clojure/algo.monads "0.1.6"]]
 
